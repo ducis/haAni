@@ -1,0 +1,2 @@
+1.wglShareLists. Create a ogl context for every thread
+2.glMapBuffer. always make opengl calls in one thread
