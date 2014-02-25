@@ -591,11 +591,11 @@ makeUniformVar :: (UniformComponent a, Storable (b a))
                => (UniformLocation -> b a -> IO ())
                -> UniformLocation -> StateVar (b a)
 makeUniformVar setter location = makeStateVar getter (setter location)
-   where getter = do
-            program <- getCurrentProgram
-            allocaBytes maxUniformBufferSize  $ \buf -> do
-            getUniform program location buf
-            peek buf
+   where getter = do{ 
+      program <- getCurrentProgram;
+      allocaBytes maxUniformBufferSize $ \buf -> do{
+         getUniform program location buf;
+         peek buf};}
 
 instance UniformComponent a => Uniform (Vertex2 a) where
    uniform = makeUniformVar $ \location (Vertex2 x y) -> uniform2 location x y

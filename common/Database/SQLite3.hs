@@ -13,7 +13,7 @@ module Database.SQLite3 (
                          open,
                          close,
                          prepare,prepareM,
-			 runScript,
+								 runScript,
                          step,
                          reset,
                          finalize,
