@@ -1,5 +1,0 @@
-fof(vertex,axiom,(entity(vertex))).
-fof(vtx_index,axiom,(entity(vtx_index))).
-fof(mesh,axiom,(entity(mesh))).
-fof([vertex,vector],axiom,(isa(vertex,vector))).
-
