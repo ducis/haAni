@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ScopedTypeVariables,LambdaCase #-}
 module Main (Main.main) where
 import GHC.IO.Handle
 import GHC.IO.Handle.FD
@@ -27,13 +27,22 @@ main = do
   set vbb $ [ containerChild:=hbb, containerChild:=scl] --, containerChild:=ctxt]
   set window [containerChild:=vbb]
   widgetShowAll window
-  db<-getArgs>>=mawaru.head
+  (dbName:args)<-getArgs
+  db<-mawaru dbName
+  case args of 
+  	[f]->loadScript db f
+	_ -> return ()
   timeoutAddFull (checkPlayback db adj>>return True) priorityDefaultIdle 10
   onClicked btnLoad $ openOpenFileDialog window db
   onClicked btnPause $ freezePlayer db adj
   onClicked btnPlay $ void $ runStr db "UPDATE playback_control SET force_to_play=(-1)"
   mainGUI
 
+loadScript db fileName = do
+	putStrLn $ "SCR: " ++ show fileName
+	readFile fileName>>=(\s->DB.runScript db s [])
+	hFlush stdout
+	
   
 openOpenFileDialog parentWindow db = do
   dialog <- fileChooserDialogNew
@@ -44,16 +53,20 @@ openOpenFileDialog parentWindow db = do
                ,ResponseCancel)
               ,("gtk-open"
                , ResponseAccept)]
+  filt <- fileFilterNew
+  fileFilterSetName filt "SQL scripts"
+  fileFilterAddPattern filt "*.sql"
+  fileChooserAddFilter dialog filt
+  fileChooserSetFilter dialog filt
   widgetShow dialog
   response <- dialogRun dialog
   case response of
     ResponseAccept -> do 
-		Just fileName <- fileChooserGetFilename dialog
-		putStrLn $ "SCR: " ++ show fileName
-		readFile fileName>>=(\s->DB.runScript db s [])
-		hFlush stdout
+	  Just fileName <- fileChooserGetFilename dialog
+	  loadScript db fileName
     _->return ()
   widgetHide dialog
+  widgetDestroy dialog
 
 --forgive::(Monad a) => a->a
 forgive = (\m->E.catch m (\(e::E.SomeException)->putStr "w">> hFlush stdout>>threadDelay 100000))

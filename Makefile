@@ -30,6 +30,8 @@ testdb: .FRC
 	rm -f test.db
 	./sqlite3 test.db<sql_scripts/main.sql
 	./sqlite3 test.db<animation.sql
+ctrl-test-win: .FRC
+	$(CONTROL) player.db
 comb0-win: .FRC
 	$(WINRD)
 	rm -f A:\\player.db
@@ -40,7 +42,7 @@ fulltest-win: .FRC
 	rm -f A:\\player.db
 	rm -f log.db
 	$(WINTERM) "$(PLAY) 1280 720 33 A:\\player.db +RTS -N8 -RTS" &
-	$(WINTERM) "$(CONTROL) A:\\player.db" &
+	$(WINTERM) "$(CONTROL) A:\\player.db animation.sql" &
 	$(WINTERM) "$(MONITOR) A:\\player.db log.db" &
 
 .FRC:
