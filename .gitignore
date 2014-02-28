@@ -10,3 +10,4 @@ log.db
 *.swp
 *.aux
 *.log
+*.db-journal
