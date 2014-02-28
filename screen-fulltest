@@ -1,0 +1,11 @@
+# must have unix-style line ending
+screen bash -c '$PLAY 1280 720 33 $TMP/player.db +RTS -N8 -RTS'
+split
+focus down
+screen bash -c '$CONTROL $TMP/player.db animation.sql'
+split
+focus down
+screen bash -c '$MONITOR $TMP/player.db log.db'
+split
+focus down
+screen bash -c 'echo press any key to exit; read -n1;killall -r haAni.\*'

@@ -1,2 +1,7 @@
+screen bash -c "ls *.sql"
 split
+focus down
+screen bash -c "ls *.h"
 split
+focus down
+screen bash -c 'ls *.db;echo $PATH;bash'
