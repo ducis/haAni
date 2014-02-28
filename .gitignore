@@ -8,3 +8,5 @@ cabal-dev
 *~
 log.db
 *.swp
+*.aux
+*.log
